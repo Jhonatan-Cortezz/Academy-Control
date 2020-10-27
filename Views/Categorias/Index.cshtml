@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Sistema.Models.Categoria>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Categoria Crusos</h1>
+
+<p>
+    <a asp-action="Create"><button class="btn btn-primary">Nuevo</button></a>
+</p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Filtro: <input type="text" name="search" value="@ViewData["CurrentFilter"]" />
+                    <input type="submit" name="name" value="Buscar" class="btn btn-info" />
+                    <a asp-action="Index" class="btn btn-link">Todos los registros</a>
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-orderSort="@ViewData["NombreSort"]">@Html.DisplayNameFor(model => model.nombre)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-orderSort="@ViewData["DescripcionParam"]">@Html.DisplayNameFor(model => model.descripcion)</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.estado)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.estado)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.categoriaId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.categoriaId">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.categoriaId">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

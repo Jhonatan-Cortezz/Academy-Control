@@ -22,12 +22,21 @@ namespace Sistema.Controllers
 
         // GET: Categorias
         //muestra el listado de todas las categorias
-        public async Task<IActionResult> Index(String orderSort, string search)//mod| para ordenarlos de manera asc o desc pasamos un parametro
+        public async Task<IActionResult> Index(String orderSort, string curetnFilter,  string search, int? page)//mod| para ordenarlos de manera asc o desc pasamos un parametro
         {
 
             ViewData["NombreSort"] = String.IsNullOrEmpty(orderSort) ? "nombre_desc" : "";
             ViewData["DescripcionParam"] = orderSort == "descripcion_asc" ? "descripcion_desc" : "descripcion_asc";
+
+            if(search != null)
+            {
+                page = 1;
+            } else
+            {
+                search = curetnFilter;
+            }
             ViewData["CurrentFilter"] = search;
+            ViewData["CurrentSort"] = orderSort;
 
             //tabla temporal
             var categorias = from s in _context.Categoria select s;
@@ -59,8 +68,11 @@ namespace Sistema.Controllers
                     break;
             }
 
-            return View(await categorias.AsNoTracking().ToListAsync());
+            //return View(await categorias.AsNoTracking().ToListAsync());
             //return View(await _context.Categoria.ToListAsync());
+
+            int pageSize = 3;
+            return View(await Paginacion<Categoria>.CreateAsync(categorias.AsNoTracking(), page ?? 1, pageSize));
         }
 
         // GET: Categorias/Details/5
